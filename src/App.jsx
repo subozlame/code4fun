@@ -7,14 +7,27 @@ import Sidebar from "./components/Sidebar";
 import LessonPanel from "./components/LessonPanel";
 import Preview from "./components/Preview";
 import Challenge from "./components/Challenge";
+import FreeType from "./components/FreeType";
 
-import { FaGithub, FaEnvelope, FaLinkedin, FaInstagram } from "react-icons/fa";
+import {
+  FaGithub,
+  FaEnvelope,
+  FaLinkedin,
+  FaInstagram,
+} from "react-icons/fa";
+
+import { Link } from "react-router-dom";
 
 function App() {
   // =========================
   // MODE SYSTEM
   // =========================
   const [mode, setMode] = useState("learn");
+
+  // =========================
+  // FREE TYPE PAGE STATE
+  // =========================
+  const [freeInput, setFreeInput] = useState("");
 
   // =========================
   // LESSON SYSTEM
@@ -42,12 +55,10 @@ function App() {
   const [completedLessons, setCompletedLessons] = useState([]);
 
   // =========================
-  // DAILY CHALLENGE (viral mechanic)
+  // DAILY CHALLENGE
   // =========================
   const dailyChallenge = useMemo(() => {
-    const index =
-      new Date().getDate() % challenges.length;
-
+    const index = new Date().getDate() % challenges.length;
     return challenges[index];
   }, []);
 
@@ -88,7 +99,7 @@ function App() {
   }, [xp, level, streak, lastActiveDate, completedLessons]);
 
   // =========================
-  // STREAK SYSTEM (viral hook)
+  // STREAK SYSTEM
   // =========================
   const updateStreak = () => {
     const today = new Date().toDateString();
@@ -117,7 +128,7 @@ function App() {
   }, [xp]);
 
   // =========================
-  // BADGE SYSTEM (viral reward loop)
+  // BADGES SYSTEM
   // =========================
   useEffect(() => {
     const newBadges = [];
@@ -132,7 +143,7 @@ function App() {
   }, [xp, streak, level]);
 
   // =========================
-  // APPLY CLASS (learning mode)
+  // APPLY CLASS
   // =========================
   const applyClass = (cls, lessonId) => {
     setActiveClasses((prev) => {
@@ -157,36 +168,27 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
 
-      {/* HEADER */}
+      {/* ================= HEADER ================= */}
       <header className="border-b border-slate-800 sticky top-0 bg-slate-950/80 backdrop-blur z-50">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
 
-          {/* HEADER TOP */}
-          <div className="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4 text-center sm:text-left">
+          {/* TOP ROW */}
+          <div className="flex flex-col items-center sm:flex-row sm:justify-between gap-4">
 
-            {/* LOGO + TITLE */}
-            <a href="/" className="flex flex-col sm:flex-row items-center gap-2">
+            {/* LOGO */}
+            <h1 className="text-xl sm:text-2xl font-bold">
+              Tailwind Quest
+            </h1>
 
-              <img
-                src="./c4f.ico"
-                alt="Logo"
-                className="w-8 h-8 rounded-full"
-              />
+            {/* MODE BUTTONS */}
+            <div className="flex gap-2 flex-wrap justify-center">
 
-              <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
-                Tailwind Quest
-              </h1>
-
-            </a>
-
-            {/* MODE SWITCH */}
-            <div className="flex gap-2">
               <button
                 onClick={() => setMode("learn")}
-                className={`px-3 py-1 rounded text-sm sm:text-base transition ${mode === "learn"
-                    ? "bg-white text-black"
-                    : "bg-slate-800"
+                className={`px-3 py-1 rounded ${mode === "learn"
+                  ? "bg-white text-black"
+                  : "bg-slate-800"
                   }`}
               >
                 Learn
@@ -194,38 +196,45 @@ function App() {
 
               <button
                 onClick={() => setMode("challenge")}
-                className={`px-3 py-1 rounded text-sm sm:text-base transition ${mode === "challenge"
-                    ? "bg-white text-black"
-                    : "bg-slate-800"
+                className={`px-3 py-1 rounded ${mode === "challenge"
+                  ? "bg-white text-black"
+                  : "bg-slate-800"
                   }`}
               >
-                Daily Challenge
+                Challenge
               </button>
+
+              <button
+                onClick={() => setMode("freetype")}
+                className={`px-3 py-1 rounded ${mode === "freetype"
+                  ? "bg-white text-black"
+                  : "bg-purple-600 hover:bg-purple-500"
+                  }`}
+              >
+                Free Type
+              </button>
+
             </div>
 
             {/* STATS */}
-            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-300">
-
+            <div className="text-xs sm:text-sm text-slate-300 flex gap-3 items-center">
               <span>Lvl {level}</span>
 
               <div className="w-20 sm:w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-green-500 transition-all"
+                  className="h-full bg-green-500"
                   style={{ width: `${xp % 100}%` }}
                 />
               </div>
 
               <span>XP {xp}</span>
-
               <span>🔥 {streak}</span>
-
             </div>
 
           </div>
 
-          {/* BADGES (CENTERED ON MOBILE) */}
+          {/* BADGES */}
           <div className="mt-3 flex flex-wrap gap-2 justify-center sm:justify-start">
-
             {badges.map((b, i) => (
               <span
                 key={i}
@@ -234,18 +243,16 @@ function App() {
                 {b}
               </span>
             ))}
-
           </div>
 
         </div>
       </header>
 
-      {/* MAIN */}
+      {/* ================= MAIN ================= */}
       <main className="max-w-7xl mx-auto px-6 py-10">
 
         <div className="grid lg:grid-cols-4 gap-6">
 
-          {/* SIDEBAR */}
           {mode === "learn" && (
             <Sidebar
               lessons={lessons}
@@ -255,10 +262,8 @@ function App() {
             />
           )}
 
-          {/* CONTENT */}
-          <div className="lg:col-span-3 space-y-6 ">
+          <div className="lg:col-span-3 space-y-6">
 
-            {/* LEARN MODE */}
             {mode === "learn" && (
               <>
                 <LessonPanel
@@ -270,7 +275,6 @@ function App() {
               </>
             )}
 
-            {/* CHALLENGE MODE (DAILY VIRAL LOOP) */}
             {mode === "challenge" && (
               <Challenge
                 challenge={dailyChallenge}
@@ -279,68 +283,28 @@ function App() {
                 addXP={addXP}
               />
             )}
+            {mode === "freetype" && (
+              <FreeType />
+            )}
 
           </div>
-
         </div>
 
       </main>
 
-      <footer className="border-t border-slate-800 bg-slate-950 text-slate-400 py-8">
+      {/* ================= FOOTER ================= */}
+      <footer className="border-t border-slate-800 py-8 text-slate-400">
 
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
 
-          {/* LEFT SIDE */}
-          <div className="text-center md:text-left">
-            <h2 className="text-white text-lg font-semibold">
-              Subodh Madai
-            </h2>
+          <p>© {new Date().getFullYear()} Tailwind Quest</p>
 
-            <p className="text-sm text-slate-500 mt-1">
-              © {new Date().getFullYear()} Tailwind Quest. All rights reserved.
-            </p>
-          </div>
+          <div className="flex gap-4">
 
-          {/* RIGHT SIDE - SOCIALS */}
-          <div className="flex items-center gap-4">
-
-            {/* GitHub */}
-            <a
-              href="https://github.com/subozlame"
-              target="_blank"
-              rel="noreferrer"
-              className="p-3 rounded-full bg-slate-900 hover:bg-white hover:text-black transition"
-            >
-              <FaGithub size={18} />
-            </a>
-
-            {/* Gmail */}
-            <a
-              href="mailto:jrffx86@gmail.com"
-              className="p-3 rounded-full bg-slate-900 hover:bg-red-500 hover:text-white transition"
-            >
-              <FaEnvelope size={18} />
-            </a>
-
-            {/* LinkedIn */}
-            <a
-              href="https://linkedin.com/in/subodh-madai"
-              target="_blank"
-              rel="noreferrer"
-              className="p-3 rounded-full bg-slate-900 hover:bg-blue-500 hover:text-white transition"
-            >
-              <FaLinkedin size={18} />
-            </a>
-
-            {/* Instagram */}
-            <a
-              href="https://instagram.com/poppypliers"
-              target="_blank"
-              rel="noreferrer"
-              className="p-3 rounded-full bg-slate-900 hover:bg-pink-500 hover:text-white transition"
-            >
-              <FaInstagram size={18} />
-            </a>
+            <FaGithub className="cursor-pointer hover:text-white" />
+            <FaEnvelope className="cursor-pointer hover:text-white" />
+            <FaLinkedin className="cursor-pointer hover:text-white" />
+            <FaInstagram className="cursor-pointer hover:text-white" />
 
           </div>
 
