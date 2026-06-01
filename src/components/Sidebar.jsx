@@ -12,8 +12,8 @@ function Sidebar({ lessons, selected, setSelected }) {
                         key={lesson.id}
                         onClick={() => setSelected(lesson)}
                         className={`w-full text-left p-3 rounded-lg transition ${selected.id === lesson.id
-                                ? "bg-white text-black"
-                                : "hover:bg-slate-800"
+                            ? "bg-white text-black"
+                            : "hover:bg-slate-800"
                             }`}
                     >
                         {lesson.title}
