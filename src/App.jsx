@@ -1,78 +1,224 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import { lessons } from "./data/lessons";
+import { challenges } from "./data/challenges";
 
 import Sidebar from "./components/Sidebar";
 import LessonPanel from "./components/LessonPanel";
 import Preview from "./components/Preview";
+import Challenge from "./components/Challenge";
 
 function App() {
+  // =========================
+  // MODE SYSTEM
+  // =========================
+  const [mode, setMode] = useState("learn");
+
+  // =========================
+  // LESSON SYSTEM
+  // =========================
   const [selected, setSelected] = useState(lessons[0]);
+
+  // =========================
+  // BUILDER STATE
+  // =========================
   const [activeClasses, setActiveClasses] = useState(
-    "bg-blue-500 text-white p-4 rounded-lg"
+    "bg-blue-500 text-white p-4 rounded-lg transition-all"
   );
 
+  // =========================
+  // GAMIFICATION CORE
+  // =========================
   const [xp, setXp] = useState(0);
   const [level, setLevel] = useState(1);
-  const [completed, setCompleted] = useState([]);
+  const [streak, setStreak] = useState(0);
+  const [lastActiveDate, setLastActiveDate] = useState(null);
 
-  const applyClass = (newClass, lessonId) => {
+  // =========================
+  // PROGRESSION
+  // =========================
+  const [completedLessons, setCompletedLessons] = useState([]);
+
+  // =========================
+  // DAILY CHALLENGE (viral mechanic)
+  // =========================
+  const dailyChallenge = useMemo(() => {
+    const index =
+      new Date().getDate() % challenges.length;
+
+    return challenges[index];
+  }, []);
+
+  // =========================
+  // BADGES
+  // =========================
+  const [badges, setBadges] = useState([]);
+
+  // =========================
+  // LOAD SAVE STATE
+  // =========================
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("tailwind-game"));
+
+    if (saved) {
+      setXp(saved.xp || 0);
+      setLevel(saved.level || 1);
+      setStreak(saved.streak || 0);
+      setLastActiveDate(saved.lastActiveDate || null);
+      setCompletedLessons(saved.completedLessons || []);
+    }
+  }, []);
+
+  // =========================
+  // SAVE STATE
+  // =========================
+  useEffect(() => {
+    localStorage.setItem(
+      "tailwind-game",
+      JSON.stringify({
+        xp,
+        level,
+        streak,
+        lastActiveDate,
+        completedLessons,
+      })
+    );
+  }, [xp, level, streak, lastActiveDate, completedLessons]);
+
+  // =========================
+  // STREAK SYSTEM (viral hook)
+  // =========================
+  const updateStreak = () => {
+    const today = new Date().toDateString();
+
+    if (lastActiveDate !== today) {
+      setStreak((s) => s + 1);
+      setLastActiveDate(today);
+    }
+  };
+
+  // =========================
+  // XP SYSTEM
+  // =========================
+  const addXP = (amount) => {
+    setXp((prev) => prev + amount);
+    updateStreak();
+  };
+
+  // =========================
+  // LEVEL SYSTEM
+  // =========================
+  useEffect(() => {
+    if (xp >= level * 120) {
+      setLevel((l) => l + 1);
+    }
+  }, [xp]);
+
+  // =========================
+  // BADGE SYSTEM (viral reward loop)
+  // =========================
+  useEffect(() => {
+    const newBadges = [];
+
+    if (xp >= 100) newBadges.push("🔥 Starter");
+    if (xp >= 300) newBadges.push("⚡ Builder");
+    if (xp >= 600) newBadges.push("🚀 Pro Coder");
+    if (streak >= 3) newBadges.push("🏆 Consistent");
+    if (level >= 5) newBadges.push("👑 Master");
+
+    setBadges(newBadges);
+  }, [xp, streak, level]);
+
+  // =========================
+  // APPLY CLASS (learning mode)
+  // =========================
+  const applyClass = (cls, lessonId) => {
     setActiveClasses((prev) => {
-      let updated = prev
+      const cleaned = prev
         .split(" ")
         .filter((c) => !c.startsWith("bg-"))
         .join(" ");
 
-      return `${updated} ${newClass}`;
+      return `${cleaned} ${cls} transition-all duration-300`;
     });
 
-    setXp((prev) => prev + 10);
+    addXP(10);
 
-    setCompleted((prev) => {
-      if (!prev.includes(lessonId)) {
-        return [...prev, lessonId];
-      }
-      return prev;
-    });
+    if (lessonId && !completedLessons.includes(lessonId)) {
+      setCompletedLessons((prev) => [...prev, lessonId]);
+    }
   };
 
-  useEffect(() => {
-    if (xp >= level * 100) {
-      setLevel((prev) => prev + 1);
-    }
-  }, [xp]);
-
+  // =========================
+  // UI
+  // =========================
   return (
     <div className="min-h-screen bg-slate-950 text-white">
 
       {/* HEADER */}
-      <header className="border-b border-slate-800">
+      <header className="border-b border-slate-800 sticky top-0 bg-slate-950/80 backdrop-blur z-50">
+
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-          <h1 className="text-2xl font-bold">
-            Tailwind Playground
+          <h1 className="text-2xl font-bold tracking-wide">
+            ⚡ Tailwind Quest
           </h1>
 
-          {/* XP UI */}
-          <div className="flex items-center gap-6">
+          {/* MODE SWITCH */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setMode("learn")}
+              className={`px-3 py-1 rounded ${mode === "learn"
+                  ? "bg-white text-black"
+                  : "bg-slate-800"
+                }`}
+            >
+              Learn
+            </button>
 
-            <span className="text-sm text-slate-400">
-              Level: {level}
-            </span>
+            <button
+              onClick={() => setMode("challenge")}
+              className={`px-3 py-1 rounded ${mode === "challenge"
+                  ? "bg-white text-black"
+                  : "bg-slate-800"
+                }`}
+            >
+              Daily Challenge
+            </button>
+          </div>
 
-            <div className="w-40 h-2 bg-slate-800 rounded-full overflow-hidden">
+          {/* STATS */}
+          <div className="flex items-center gap-4 text-sm text-slate-300">
+
+            <span>Lvl {level}</span>
+
+            <div className="w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-green-500"
+                className="h-full bg-green-500 transition-all"
                 style={{ width: `${xp % 100}%` }}
               />
             </div>
 
-            <span className="text-sm text-slate-400">
-              XP: {xp}
-            </span>
+            <span>XP {xp}</span>
+
+            <span>🔥 {streak}</span>
 
           </div>
 
         </div>
+
+        {/* BADGES */}
+        <div className="px-6 pb-3 flex gap-2 flex-wrap">
+          {badges.map((b, i) => (
+            <span
+              key={i}
+              className="px-2 py-1 text-xs bg-yellow-500 text-black rounded-full"
+            >
+              {b}
+            </span>
+          ))}
+        </div>
+
       </header>
 
       {/* MAIN */}
@@ -80,21 +226,40 @@ function App() {
 
         <div className="grid lg:grid-cols-4 gap-6">
 
-          <Sidebar
-            lessons={lessons}
-            selected={selected}
-            setSelected={setSelected}
-            completed={completed}
-          />
+          {/* SIDEBAR */}
+          {mode === "learn" && (
+            <Sidebar
+              lessons={lessons}
+              selected={selected}
+              setSelected={setSelected}
+              completed={completedLessons}
+            />
+          )}
 
+          {/* CONTENT */}
           <div className="lg:col-span-3 space-y-6">
 
-            <LessonPanel
-              lesson={selected}
-              applyClass={applyClass}
-            />
+            {/* LEARN MODE */}
+            {mode === "learn" && (
+              <>
+                <LessonPanel
+                  lesson={selected}
+                  applyClass={applyClass}
+                />
 
-            <Preview activeClasses={activeClasses} />
+                <Preview activeClasses={activeClasses} />
+              </>
+            )}
+
+            {/* CHALLENGE MODE (DAILY VIRAL LOOP) */}
+            {mode === "challenge" && (
+              <Challenge
+                challenge={dailyChallenge}
+                activeClasses={activeClasses}
+                setActiveClasses={setActiveClasses}
+                addXP={addXP}
+              />
+            )}
 
           </div>
 
