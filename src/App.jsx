@@ -162,11 +162,12 @@ function App() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
 
-          {/* TOP ROW */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+          {/* HEADER TOP */}
+          <div className="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4 text-center sm:text-left">
 
             {/* LOGO + TITLE */}
-            <a href="/" className="flex items-center gap-2">
+            <a href="/" className="flex flex-col sm:flex-row items-center gap-2">
+
               <img
                 src="./c4f.ico"
                 alt="Logo"
@@ -176,6 +177,7 @@ function App() {
               <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
                 Tailwind Quest
               </h1>
+
             </a>
 
             {/* MODE SWITCH */}
@@ -183,8 +185,8 @@ function App() {
               <button
                 onClick={() => setMode("learn")}
                 className={`px-3 py-1 rounded text-sm sm:text-base transition ${mode === "learn"
-                  ? "bg-white text-black"
-                  : "bg-slate-800"
+                    ? "bg-white text-black"
+                    : "bg-slate-800"
                   }`}
               >
                 Learn
@@ -193,8 +195,8 @@ function App() {
               <button
                 onClick={() => setMode("challenge")}
                 className={`px-3 py-1 rounded text-sm sm:text-base transition ${mode === "challenge"
-                  ? "bg-white text-black"
-                  : "bg-slate-800"
+                    ? "bg-white text-black"
+                    : "bg-slate-800"
                   }`}
               >
                 Daily Challenge
@@ -221,8 +223,8 @@ function App() {
 
           </div>
 
-          {/* BADGES */}
-          <div className="mt-3 flex gap-2 flex-wrap">
+          {/* BADGES (CENTERED ON MOBILE) */}
+          <div className="mt-3 flex flex-wrap gap-2 justify-center sm:justify-start">
 
             {badges.map((b, i) => (
               <span
