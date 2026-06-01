@@ -240,7 +240,7 @@ function App() {
           )}
 
           {/* CONTENT */}
-          <div className="lg:col-span-3 space-y-6 max-h-screen overflow-y-auto">
+          <div className="lg:col-span-3 space-y-6 ">
 
             {/* LEARN MODE */}
             {mode === "learn" && (
@@ -270,6 +270,67 @@ function App() {
         </div>
 
       </main>
+
+      <footer className="border-t border-slate-800 bg-slate-950 text-slate-400 py-8">
+
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+
+          {/* LEFT SIDE */}
+          <div className="text-center md:text-left">
+            <h2 className="text-white text-lg font-semibold">
+              Subodh Madai
+            </h2>
+
+            <p className="text-sm text-slate-500 mt-1">
+              © {new Date().getFullYear()} Tailwind Quest. All rights reserved.
+            </p>
+          </div>
+
+          {/* RIGHT SIDE - SOCIALS */}
+          <div className="flex items-center gap-4">
+
+            {/* GitHub */}
+            <a
+              href="https://github.com/subozlame"
+              target="_blank"
+              rel="noreferrer"
+              className="p-3 rounded-full bg-slate-900 hover:bg-white hover:text-black transition"
+            >
+              <FaGithub size={18} />
+            </a>
+
+            {/* Gmail */}
+            <a
+              href="mailto:jrffx86@gmail.com"
+              className="p-3 rounded-full bg-slate-900 hover:bg-red-500 hover:text-white transition"
+            >
+              <FaEnvelope size={18} />
+            </a>
+
+            {/* LinkedIn */}
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              className="p-3 rounded-full bg-slate-900 hover:bg-blue-500 hover:text-white transition"
+            >
+              <FaLinkedin size={18} />
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noreferrer"
+              className="p-3 rounded-full bg-slate-900 hover:bg-pink-500 hover:text-white transition"
+            >
+              <FaInstagram size={18} />
+            </a>
+
+          </div>
+
+        </div>
+      </footer>
 
     </div>
   );
