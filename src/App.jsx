@@ -160,8 +160,11 @@ function App() {
 
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
+          <a href="/">
+            <img src="./c4f.ico" alt="Logo" className="w-8 h-8 mr-2 rounded-full" />
+          </a>
           <h1 className="text-2xl font-bold tracking-wide">
-            ⚡ Tailwind Quest
+            Tailwind Quest
           </h1>
 
           {/* MODE SWITCH */}
@@ -169,8 +172,8 @@ function App() {
             <button
               onClick={() => setMode("learn")}
               className={`px-3 py-1 rounded ${mode === "learn"
-                  ? "bg-white text-black"
-                  : "bg-slate-800"
+                ? "bg-white text-black"
+                : "bg-slate-800"
                 }`}
             >
               Learn
@@ -179,8 +182,8 @@ function App() {
             <button
               onClick={() => setMode("challenge")}
               className={`px-3 py-1 rounded ${mode === "challenge"
-                  ? "bg-white text-black"
-                  : "bg-slate-800"
+                ? "bg-white text-black"
+                : "bg-slate-800"
                 }`}
             >
               Daily Challenge
@@ -237,7 +240,7 @@ function App() {
           )}
 
           {/* CONTENT */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-3 space-y-6 max-h-screen overflow-y-auto">
 
             {/* LEARN MODE */}
             {mode === "learn" && (
@@ -258,6 +261,7 @@ function App() {
                 activeClasses={activeClasses}
                 setActiveClasses={setActiveClasses}
                 addXP={addXP}
+                className="animate-fade-in"
               />
             )}
 

@@ -19,7 +19,7 @@ function Challenge({ challenge, activeClasses, setActiveClasses, addXP }) {
     };
 
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-3xl mx-auto mt-10">
 
             <h2 className="text-2xl font-bold">{challenge.title}</h2>
 
