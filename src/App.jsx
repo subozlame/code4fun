@@ -8,6 +8,8 @@ import LessonPanel from "./components/LessonPanel";
 import Preview from "./components/Preview";
 import Challenge from "./components/Challenge";
 
+import { FaGithub, FaEnvelope, FaLinkedin, FaInstagram } from "react-icons/fa";
+
 function App() {
   // =========================
   // MODE SYSTEM
@@ -309,7 +311,7 @@ function App() {
 
             {/* LinkedIn */}
             <a
-              href="https://linkedin.com"
+              href="https://linkedin.com/in/subodh-madai"
               target="_blank"
               rel="noreferrer"
               className="p-3 rounded-full bg-slate-900 hover:bg-blue-500 hover:text-white transition"
@@ -319,7 +321,7 @@ function App() {
 
             {/* Instagram */}
             <a
-              href="https://instagram.com"
+              href="https://instagram.com/poppypliers"
               target="_blank"
               rel="noreferrer"
               className="p-3 rounded-full bg-slate-900 hover:bg-pink-500 hover:text-white transition"
