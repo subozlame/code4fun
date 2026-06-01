@@ -3,11 +3,12 @@ import { lessons } from "./data/lessons";
 
 import Sidebar from "./components/Sidebar";
 import LessonPanel from "./components/LessonPanel";
-import Preview from "./components/LessonPanel";
+import Preview from "./components/Preview";
 
 function App() {
   const [selected, setSelected] = useState(lessons[0]);
-
+  console.log("LESSONS:", lessons);
+  console.log("SELECTED:", selected);
   const [activeClasses, setActiveClasses] = useState("bg-blue-500 text-white p-4 rounded-lg");
 
   const applyClass = (newClass) => {
@@ -22,6 +23,7 @@ function App() {
   };
 
   return (
+
     <div className="min-h-screen bg-slate-950 text-white">
 
       <header className="border-b border-slate-800">

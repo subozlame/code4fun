@@ -1,4 +1,12 @@
 function LessonPanel({ lesson, applyClass }) {
+    if (!lesson) {
+        return (
+            <div className="bg-slate-900 p-6 rounded-xl">
+                Loading lesson...
+            </div>
+        );
+    }
+
     return (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
 
