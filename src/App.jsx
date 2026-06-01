@@ -160,70 +160,82 @@ function App() {
       {/* HEADER */}
       <header className="border-b border-slate-800 sticky top-0 bg-slate-950/80 backdrop-blur z-50">
 
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
 
-          <a href="/">
-            <img src="./c4f.ico" alt="Logo" className="w-8 h-8 mr-2 rounded-full" />
-          </a>
-          <h1 className="text-2xl font-bold tracking-wide">
-            Tailwind Quest
-          </h1>
+          {/* TOP ROW */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 
-          {/* MODE SWITCH */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => setMode("learn")}
-              className={`px-3 py-1 rounded ${mode === "learn"
-                ? "bg-white text-black"
-                : "bg-slate-800"
-                }`}
-            >
-              Learn
-            </button>
-
-            <button
-              onClick={() => setMode("challenge")}
-              className={`px-3 py-1 rounded ${mode === "challenge"
-                ? "bg-white text-black"
-                : "bg-slate-800"
-                }`}
-            >
-              Daily Challenge
-            </button>
-          </div>
-
-          {/* STATS */}
-          <div className="flex items-center gap-4 text-sm text-slate-300">
-
-            <span>Lvl {level}</span>
-
-            <div className="w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-green-500 transition-all"
-                style={{ width: `${xp % 100}%` }}
+            {/* LOGO + TITLE */}
+            <a href="/" className="flex items-center gap-2">
+              <img
+                src="./c4f.ico"
+                alt="Logo"
+                className="w-8 h-8 rounded-full"
               />
+
+              <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
+                Tailwind Quest
+              </h1>
+            </a>
+
+            {/* MODE SWITCH */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setMode("learn")}
+                className={`px-3 py-1 rounded text-sm sm:text-base transition ${mode === "learn"
+                  ? "bg-white text-black"
+                  : "bg-slate-800"
+                  }`}
+              >
+                Learn
+              </button>
+
+              <button
+                onClick={() => setMode("challenge")}
+                className={`px-3 py-1 rounded text-sm sm:text-base transition ${mode === "challenge"
+                  ? "bg-white text-black"
+                  : "bg-slate-800"
+                  }`}
+              >
+                Daily Challenge
+              </button>
             </div>
 
-            <span>XP {xp}</span>
+            {/* STATS */}
+            <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-300">
 
-            <span>🔥 {streak}</span>
+              <span>Lvl {level}</span>
+
+              <div className="w-20 sm:w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-green-500 transition-all"
+                  style={{ width: `${xp % 100}%` }}
+                />
+              </div>
+
+              <span>XP {xp}</span>
+
+              <span>🔥 {streak}</span>
+
+            </div>
+
+          </div>
+
+          {/* BADGES */}
+          <div className="mt-3 flex gap-2 flex-wrap">
+
+            {badges.map((b, i) => (
+              <span
+                key={i}
+                className="px-2 py-1 text-xs bg-yellow-500 text-black rounded-full"
+              >
+                {b}
+              </span>
+            ))}
 
           </div>
 
         </div>
-
-        {/* BADGES */}
-        <div className="px-6 pb-3 flex gap-2 flex-wrap">
-          {badges.map((b, i) => (
-            <span
-              key={i}
-              className="px-2 py-1 text-xs bg-yellow-500 text-black rounded-full"
-            >
-              {b}
-            </span>
-          ))}
-        </div>
-
       </header>
 
       {/* MAIN */}
@@ -263,7 +275,6 @@ function App() {
                 activeClasses={activeClasses}
                 setActiveClasses={setActiveClasses}
                 addXP={addXP}
-                className="animate-fade-in"
               />
             )}
 
